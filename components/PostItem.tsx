@@ -156,8 +156,6 @@ const PostItem: React.FC<PostItemProps> = ({ post }) => {
             />
           </TouchableOpacity>
         </View>
-        {/* --- Fin Barra de Acciones --- */}
-
 
         {/* Descripción (si existe) */}
         {post.description && (
