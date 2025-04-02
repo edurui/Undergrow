@@ -2,17 +2,17 @@
 SET search_path TO db_undergrow;
 
 -- Inserción de disciplinas artísticas
-INSERT INTO "discipline" ("name") VALUES 
-('Graffiti'),
-('Música'),
-('Danza'),
-('Cine'),
-('Teatro'),
-('Fotografía'),
-('Pintura'),
-('Escultura'),
-('Literatura'),
-('Arte Digital');
+INSERT INTO "discipline" ("name", "description") VALUES 
+('Graffiti', 'Arte urbano con aerosoles y otras técnicas en espacios públicos'),
+('Música', 'Composición y ejecución de piezas sonoras artísticas'),
+('Danza', 'Expresión corporal a través del movimiento rítmico'),
+('Cine', 'Arte de crear películas y contenido audiovisual'),
+('Teatro', 'Representación de historias frente a una audiencia'),
+('Fotografía', 'Captura de imágenes mediante técnicas y equipos fotográficos'),
+('Pintura', 'Aplicación de pigmentos sobre superficies para crear arte visual'),
+('Escultura', 'Creación de formas tridimensionales artísticas'),
+('Literatura', 'Arte de la expresión escrita en sus diversas formas'),
+('Arte Digital', 'Creación artística mediante herramientas tecnológicas');
 
 -- Inserción de usuarios
 INSERT INTO "user" ("name", "surname", "mail", "password_hash", "validated", "verified", "birth_date", "create_date")
@@ -29,18 +29,18 @@ VALUES
 ('Pablo', 'Ruiz', 'pablo.ruiz@mail.com', '$2a$12$jKlMnOpQrStUvWxYz987654321ABCDEFGHIJKLMNOPQRST', true, true, '1986-08-30', '2024-03-10 17:35:00');
 
 -- Inserción de perfiles
-INSERT INTO "profile" ("user_name", "photo", "description", "create_date", "id_user", "id_discipline")
+INSERT INTO "profile" ("user_name", "photo", "description", "create_date", "location", "website", "id_user", "id_discipline")
 VALUES 
-('urban_maria', 'profile_pics/maria.jpg', 'Artista urbana apasionada por el color', '2024-03-01 11:00:00', 1, 1),
-('carlos_beats', 'profile_pics/carlos.jpg', 'Productor musical y DJ', '2024-03-02 15:00:00', 2, 2),
-('laura_dances', 'profile_pics/laura.jpg', 'Bailarina contemporánea', '2024-03-03 09:30:00', 3, 3),
-('javi_films', 'profile_pics/javier.jpg', 'Director de cine independiente', '2024-03-04 16:45:00', 4, 4),
-('ana_stage', 'profile_pics/ana.jpg', 'Actriz y directora teatral', '2024-03-05 12:15:00', 5, 5),
-('miguel_lens', 'profile_pics/miguel.jpg', 'Fotógrafo de paisajes urbanos', '2024-03-06 08:45:00', 6, 6),
-('elena_canvas', 'profile_pics/elena.jpg', 'Pintora abstracta', '2024-03-07 14:00:00', 7, 7),
-('david_sculpts', 'profile_pics/david.jpg', 'Escultor de materiales reciclados', '2024-03-08 15:30:00', 8, 8),
-('lucia_words', 'profile_pics/lucia.jpg', 'Poeta y escritora de microrelatos', '2024-03-09 10:30:00', 9, 9),
-('pablo_pixel', 'profile_pics/pablo.jpg', 'Artista digital y diseñador', '2024-03-10 18:00:00', 10, 10);
+('urban_maria', 'profile_pics/maria.jpg', 'Artista urbana apasionada por el color', '2024-03-01 11:00:00', 'Madrid', 'www.mariaurban.com', 1, 1),
+('carlos_beats', 'profile_pics/carlos.jpg', 'Productor musical y DJ', '2024-03-02 15:00:00', 'Barcelona', 'www.carlosbeats.com', 2, 2),
+('laura_dances', 'profile_pics/laura.jpg', 'Bailarina contemporánea', '2024-03-03 09:30:00', 'Valencia', 'www.lauradance.com', 3, 3),
+('javi_films', 'profile_pics/javier.jpg', 'Director de cine independiente', '2024-03-04 16:45:00', 'Sevilla', 'www.javifilms.com', 4, 4),
+('ana_stage', 'profile_pics/ana.jpg', 'Actriz y directora teatral', '2024-03-05 12:15:00', 'Bilbao', 'www.anastage.com', 5, 5),
+('miguel_lens', 'profile_pics/miguel.jpg', 'Fotógrafo de paisajes urbanos', '2024-03-06 08:45:00', 'Málaga', 'www.miguellens.com', 6, 6),
+('elena_canvas', 'profile_pics/elena.jpg', 'Pintora abstracta', '2024-03-07 14:00:00', 'Zaragoza', 'www.elenaart.com', 7, 7),
+('david_sculpts', 'profile_pics/david.jpg', 'Escultor de materiales reciclados', '2024-03-08 15:30:00', 'Murcia', 'www.davidsculpture.com', 8, 8),
+('lucia_words', 'profile_pics/lucia.jpg', 'Poeta y escritora de microrelatos', '2024-03-09 10:30:00', 'Granada', 'www.luciawords.com', 9, 9),
+('pablo_pixel', 'profile_pics/pablo.jpg', 'Artista digital y diseñador', '2024-03-10 18:00:00', 'Alicante', 'www.pablopixel.com', 10, 10);
 
 -- Inserción de filtros
 INSERT INTO "filter" ("name", "id_discipline")
@@ -76,38 +76,38 @@ VALUES
 ('Diseño web', 10),
 ('NFT', 10);
 
--- Inserción de posts
-INSERT INTO "post" ("description", "create_date", "id_user")
+-- Inserción de posts (corregido para incluir id_discipline y title)
+INSERT INTO "post" ("title", "description", "create_date", "id_user", "id_discipline")
 VALUES 
-('Mi último mural en el festival de arte urbano', '2024-03-15 14:30:00', 1),
-('Nueva composición electrónica, feedback bienvenido', '2024-03-16 18:45:00', 2),
-('Ensayo para la próxima competición', '2024-03-17 10:20:00', 3),
-('Backstage de mi nuevo cortometraje', '2024-03-18 16:10:00', 4),
-('Escena final de mi obra "Sombras"', '2024-03-19 20:30:00', 5),
-('Serie urbana: "Luces de ciudad"', '2024-03-20 09:15:00', 6),
-('Mi exposición "Colores del alma" abre mañana', '2024-03-21 13:40:00', 7),
-('Nueva pieza terminada: "Metamorfosis"', '2024-03-22 11:25:00', 8),
-('Compartiendo mi último poema visual', '2024-03-23 17:50:00', 9),
-('Proyecto de realidad aumentada finalizado', '2024-03-24 15:05:00', 10);
+('Festival de Arte Urbano', 'Mi último mural en el festival de arte urbano', '2024-03-15 14:30:00', 1, 1),
+('Nueva Composición', 'Nueva composición electrónica, feedback bienvenido', '2024-03-16 18:45:00', 2, 2),
+('Ensayo de Danza', 'Ensayo para la próxima competición', '2024-03-17 10:20:00', 3, 3),
+('Detrás de Cámaras', 'Backstage de mi nuevo cortometraje', '2024-03-18 16:10:00', 4, 4),
+('Obra Sombras', 'Escena final de mi obra "Sombras"', '2024-03-19 20:30:00', 5, 5),
+('Luces de Ciudad', 'Serie urbana: "Luces de ciudad"', '2024-03-20 09:15:00', 6, 6),
+('Exposición Colores del Alma', 'Mi exposición "Colores del alma" abre mañana', '2024-03-21 13:40:00', 7, 7),
+('Metamorfosis', 'Nueva pieza terminada: "Metamorfosis"', '2024-03-22 11:25:00', 8, 8),
+('Poema Visual', 'Compartiendo mi último poema visual', '2024-03-23 17:50:00', 9, 9),
+('Realidad Aumentada', 'Proyecto de realidad aumentada finalizado', '2024-03-24 15:05:00', 10, 10);
 
--- Inserción de multimedia
-INSERT INTO "multimedia" ("file_url", "file_type", "id_post")
+-- Inserción de multimedia (corregido para incluir file_size)
+INSERT INTO "multimedia" ("file_url", "file_type", "file_size", "id_post")
 VALUES 
-('uploads/mural_festival.jpg', 'image/jpeg', 1),
-('uploads/mural_detail.jpg', 'image/jpeg', 1),
-('uploads/electronic_track.mp3', 'audio/mpeg', 2),
-('uploads/dance_rehearsal.mp4', 'video/mp4', 3),
-('uploads/dance_photo.jpg', 'image/jpeg', 3),
-('uploads/film_backstage.jpg', 'image/jpeg', 4),
-('uploads/short_film_teaser.mp4', 'video/mp4', 4),
-('uploads/theater_scene.jpg', 'image/jpeg', 5),
-('uploads/city_lights_1.jpg', 'image/jpeg', 6),
-('uploads/city_lights_2.jpg', 'image/jpeg', 6),
-('uploads/city_lights_3.jpg', 'image/jpeg', 6),
-('uploads/exhibition_preview.jpg', 'image/jpeg', 7),
-('uploads/sculpture_metamorphosis.jpg', 'image/jpeg', 8),
-('uploads/visual_poem.jpg', 'image/jpeg', 9),
-('uploads/ar_project.mp4', 'video/mp4', 10);
+('uploads/mural_festival.jpg', 'image/jpeg', 2048000, 1),
+('uploads/mural_detail.jpg', 'image/jpeg', 1536000, 1),
+('uploads/electronic_track.mp3', 'audio/mpeg', 4096000, 2),
+('uploads/dance_rehearsal.mp4', 'video/mp4', 15360000, 3),
+('uploads/dance_photo.jpg', 'image/jpeg', 1024000, 3),
+('uploads/film_backstage.jpg', 'image/jpeg', 2560000, 4),
+('uploads/short_film_teaser.mp4', 'video/mp4', 20480000, 4),
+('uploads/theater_scene.jpg', 'image/jpeg', 3072000, 5),
+('uploads/city_lights_1.jpg', 'image/jpeg', 2304000, 6),
+('uploads/city_lights_2.jpg', 'image/jpeg', 2304000, 6),
+('uploads/city_lights_3.jpg', 'image/jpeg', 2304000, 6),
+('uploads/exhibition_preview.jpg', 'image/jpeg', 4096000, 7),
+('uploads/sculpture_metamorphosis.jpg', 'image/jpeg', 5120000, 8),
+('uploads/visual_poem.jpg', 'image/jpeg', 1024000, 9),
+('uploads/ar_project.mp4', 'video/mp4', 25600000, 10);
 
 -- Inserción de likes
 INSERT INTO "liked_post" ("create_date", "id_post", "id_user")
