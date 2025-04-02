@@ -1,0 +1,14 @@
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
+import { StyleSheet } from "react-native";
+
+export default function SearchScreen() {
+  return (
+    <ThemedView style={styles.container}>
+      <ThemedText type="title">Pantalla de Búsqueda</ThemedText>
+    </ThemedView>
+  );
+}
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: "center", alignItems: "center" },
+});
