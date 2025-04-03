@@ -6,13 +6,20 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import "../localization/i18n.config";
 
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 export { ErrorBoundary } from "expo-router";
 
 export default function RootLayout() {
   return (
-    <AuthProvider>
-      <RootLayoutNav />
-    </AuthProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <AuthProvider>
+          <RootLayoutNav />
+        </AuthProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -28,18 +35,9 @@ function RootLayoutNav() {
 
     const inAuthGroup = segments[0] === "auth";
 
-    console.log(
-      "Auth State Changed:",
-      authState?.isAuthenticated,
-      "Current Segment:",
-      segments[0]
-    );
-
     if (authState?.isAuthenticated && inAuthGroup) {
-      console.log("Redirecting to (tabs)...");
       router.replace("/(tabs)");
     } else if (!authState?.isAuthenticated && !inAuthGroup) {
-      console.log("Redirecting to auth...");
       router.replace("/auth");
     }
   }, [authState?.isAuthenticated, isLoading, segments]);
@@ -60,9 +58,14 @@ function RootLayoutNav() {
   }
 
   return (
-    <Stack>
+    <Stack screenOptions={{
+      //  animation: 'fade', 
+      animation: 'slide_from_bottom',
+      animationDuration: 250,
+  }}>
       <Stack.Screen name="auth" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="settings" options={{ headerShown: false }} />
       <Stack.Screen name="+not-found" />
     </Stack>
   );

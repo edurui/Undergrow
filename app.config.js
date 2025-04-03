@@ -1,4 +1,4 @@
-import "dotenv/config"; 
+import "dotenv/config";
 
 export default {
   expo: {
@@ -9,6 +9,8 @@ export default {
     icon: "./assets/images/icon.png",
     scheme: "myapp",
     userInterfaceStyle: "automatic",
+    newArchEnabled: true,
+    icon: "./assets/images/undergrow-icon-nobg.png",
 
     ios: {
       supportsTablet: true,
@@ -16,8 +18,8 @@ export default {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/images/adaptive-icon.png",
-        backgroundColor: "#ffffff",
+        foregroundImage: "./assets/images/undergrow-icon-nobg.png",
+        backgroundColor: "#FFFFFF",
       },
       package: "com.tuorganizacion.undergrow",
     },
@@ -43,6 +45,7 @@ export default {
     },
     extra: {
       eas: {
+        projectId: "54d6a289-99f0-4f17-874e-0f1f28c2d176",
       },
       apiBaseUrl: process.env.API_BASE_URL,
     },

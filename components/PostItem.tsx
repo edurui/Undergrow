@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,21 +10,14 @@ import {
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ThemedText } from "./ThemedText";
-import { ThemedView } from "./ThemedView";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { Post } from "@/constants/dummyData";
 
-export interface Post {
-  id: string;
-  user: {
-    name: string;
-    avatarUrl?: string;
-  };
-  imageUrl: string;
-  description?: string;
-  commentCount?: number;
-  likesCount?: number;
-}
+import { formatDistanceToNow } from "date-fns";
+import { es } from "date-fns/locale";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { runOnJS } from 'react-native-reanimated';
 
 interface PostItemProps {
   post: Post;
@@ -35,56 +28,96 @@ const PostItem: React.FC<PostItemProps> = ({ post }) => {
   const colorScheme = useColorScheme();
   const currentColors = Colors[colorScheme ?? "light"];
 
-  const [isLiked, setIsLiked] = useState<boolean>(false);
-  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [isLiked, setIsLiked] = useState<boolean>(
+    post.isLikedByCurrentUser ?? false
+  );
+  const [isSaved, setIsSaved] = useState<boolean>(
+    post.isSavedByCurrentUser ?? false
+  );
+  const [currentLikeCount, setCurrentLikeCount] = useState<number>(
+    post.likeCount
+  );
+
+  const timeAgo = formatDistanceToNow(post.createdAt, {
+    addSuffix: true,
+    locale: es,
+  });
 
   const handleLikePress = () => {
-    setIsLiked((prev) => !prev);
-    console.log(`Post ${post.id} ${!isLiked ? "Liked" : "Unliked"}`);
+    try {
+      setIsLiked((prev) => {
+        const newIsLiked = !prev;
+        setCurrentLikeCount((count) => (newIsLiked ? count + 1 : count - 1));
+        return newIsLiked;
+      });
+    } catch (error) {
+      console.error("Error al dar like:", error);
+    }
   };
 
+  const doubleTapGesture = Gesture.Tap()
+    .numberOfTaps(2)
+    .onEnd((_event, success) => {
+      if (success) {
+        runOnJS(handleLikePress)();
+      }
+    });
+
   const handleCommentPress = () => {
-    console.log(`Abrir comentarios para Post ${post.id}`);
     Alert.alert(
       "Comentarios",
-      `Simulando apertura de comentarios para el post de ${post.user.name}.`
+      `Simulando apertura de comentarios (${post.commentCount}) para el post de ${post.user.name}.`
     );
   };
 
   const handleSavePress = () => {
     setIsSaved((prev) => !prev);
-    console.log(`Post ${post.id} ${!isSaved ? "Saved" : "Unsaved"}`);
   };
 
   const styles = StyleSheet.create({
     container: {
-      marginBottom: 15, 
-      backgroundColor: currentColors.card,
+      marginBottom: 5,
+      backgroundColor: currentColors.background,
     },
-    header: {
+    imageContainer: {
+      backgroundColor: currentColors.border,
+      width: "100%",
+      height: undefined,
+    },
+    mainImage: {
+      width: "100%",
+      height: undefined,
+      aspectRatio: 1,
+    },
+    overlayHeader: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
       flexDirection: "row",
       alignItems: "center",
-      paddingHorizontal: 12,
-      paddingVertical: 10,
+      padding: 12,
     },
     avatar: {
-      width: 35,
-      height: 35,
-      borderRadius: 17.5,
-      marginRight: 10,
+      width: 32,
+      height: 32,
+      borderRadius: 16,
+      marginRight: 8,
       backgroundColor: currentColors.border,
+      borderWidth: 1,
+      borderColor: "rgba(255, 255, 255, 0.8)",
     },
-    username: {
+    usernameHeader: {
       fontWeight: "bold",
-    },
-    image: {
-      width: width,
-      height: width,
-      backgroundColor: currentColors.border,
+      color: "#ffffff",
+      textShadowColor: "rgba(0, 0, 0, 0.75)",
+      textShadowOffset: { width: 0, height: 1 },
+      textShadowRadius: 2,
     },
     footer: {
       paddingHorizontal: 12,
-      paddingVertical: 10,
+      paddingTop: 10,
+      paddingBottom: 10,
     },
     actionsContainer: {
       flexDirection: "row",
@@ -100,74 +133,112 @@ const PostItem: React.FC<PostItemProps> = ({ post }) => {
       padding: 6,
       marginRight: 10,
     },
-    icon: {
-    },
-    descriptionContainer: {
+    infoContainer: {},
+    likesText: {
+      fontWeight: "bold",
+      marginBottom: 4,
     },
     description: {
       lineHeight: 18,
+      marginBottom: 4,
+    },
+    usernameDescription: {
+      fontWeight: "bold",
+      marginRight: 4,
+    },
+    commentsLink: {
+      color: currentColors.placeholder,
+      marginBottom: 4,
+    },
+    dateText: {
+      color: currentColors.placeholder,
+      fontSize: 12,
+      textTransform: "uppercase",
     },
   });
 
   return (
     <View style={styles.container}>
-      {/* Header (sin cambios) */}
-      <View style={styles.header}>
-        {post.user.avatarUrl ? (
-          <Image source={{ uri: post.user.avatarUrl }} style={styles.avatar} />
-        ) : (
-          <View style={styles.avatar} />
-        )}
-        <ThemedText style={styles.username}>{post.user.name}</ThemedText>
-      </View>
+      <GestureDetector gesture={doubleTapGesture}>
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: post.imageUrl }} style={styles.mainImage} />
+          <View style={styles.overlayHeader}>
+            {post.user.avatarUrl ? (
+              <Image
+                source={{ uri: post.user.avatarUrl }}
+                style={styles.avatar}
+              />
+            ) : (
+              <View style={styles.avatar} />
+            )}
+            <ThemedText style={styles.usernameHeader}>
+              {post.user.name}
+            </ThemedText>
+          </View>
+        </View>
+      </GestureDetector>
 
-      {/* Imagen Principal (sin cambios) */}
-      <Image source={{ uri: post.imageUrl }} style={styles.image} />
-
-      {/* --- Footer Modificado --- */}
       <View style={styles.footer}>
-        {/* --- Barra de Acciones --- */}
         <View style={styles.actionsContainer}>
-          {/* Iconos Izquierda (Like, Comment) */}
           <View style={styles.leftActions}>
-            <TouchableOpacity onPress={handleLikePress} style={styles.actionButton}>
+            <TouchableOpacity
+              onPress={handleLikePress}
+              style={styles.actionButton}
+            >
               <Ionicons
-                name={isLiked ? 'heart' : 'heart-outline'}
-                size={26}
-                color={isLiked ? 'red' : currentColors.text} // Rojo si liked
+                name={isLiked ? "heart" : "heart-outline"}
+                size={28}
+                color={isLiked ? "red" : currentColors.text}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleCommentPress} style={styles.actionButton}>
+            <TouchableOpacity
+              onPress={handleCommentPress}
+              style={styles.actionButton}
+            >
               <Ionicons
-                name="chatbubble-outline" // Icono siempre outline para comentar
-                size={26}
+                name="chatbubble-outline"
+                size={27}
                 color={currentColors.text}
               />
             </TouchableOpacity>
-            {/* Podrías añadir el icono de 'Share' aquí si quieres */}
           </View>
-
-          {/* Icono Derecha (Guardar) */}
-          <TouchableOpacity onPress={handleSavePress} style={styles.actionButton}>
+          <TouchableOpacity
+            onPress={handleSavePress}
+            style={styles.actionButton}
+          >
             <Ionicons
-              name={isSaved ? 'bookmark' : 'bookmark-outline'}
-              size={26}
-              color={currentColors.text} // Puedes hacerlo de otro color si quieres
+              name={isSaved ? "bookmark" : "bookmark-outline"}
+              size={27}
+              color={currentColors.text}
             />
           </TouchableOpacity>
         </View>
 
-        {/* Descripción (si existe) */}
-        {post.description && (
-          <View style={styles.descriptionContainer}>
-            <ThemedText style={styles.description}>
-              <ThemedText style={[styles.username, {marginRight: 5}]}>{post.user.name}</ThemedText>
-              {' '} {/* Espacio entre nombre y descripción */}
-              {post.description}
-            </ThemedText>
-          </View>
+        {currentLikeCount > 0 && (
+          <ThemedText style={styles.likesText}>
+            {currentLikeCount.toLocaleString("es-ES")}{" "}
+            {currentLikeCount === 1 ? "Me gusta" : "Me gusta"}
+          </ThemedText>
         )}
 
+        {post.description && (
+          <ThemedText style={styles.description} numberOfLines={2}>
+            <ThemedText style={styles.usernameDescription}>
+              {post.user.name}
+            </ThemedText>{" "}
+            {post.description}
+          </ThemedText>
+        )}
+
+        {post.commentCount > 0 && (
+          <TouchableOpacity onPress={handleCommentPress}>
+            <ThemedText style={styles.commentsLink}>
+              Ver los {post.commentCount} comentarios
+            </ThemedText>
+          </TouchableOpacity>
+        )}
+
+        <ThemedText style={styles.dateText}>{timeAgo}</ThemedText>
       </View>
     </View>
   );

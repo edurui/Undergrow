@@ -1,0 +1,31 @@
+import React from 'react';
+import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { Stack } from 'expo-router';
+import { ThemedText } from '@/components/ThemedText';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { Colors } from '@/constants/Colors';
+
+export default function LikedPostsScreen() {
+  const colorScheme = useColorScheme();
+  const currentColors = Colors[colorScheme ?? 'light'];
+
+  return (
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: currentColors.background }]}>
+      <Stack.Screen options={{ title: 'Me gusta' }} />
+      <View style={styles.container}>
+        <ThemedText type="title">Posts que te Gustan</ThemedText>
+        <ThemedText>Aquí se mostrarán los posts a los que diste like...</ThemedText>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  safeArea: { flex: 1 },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+});
