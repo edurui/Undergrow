@@ -13,6 +13,8 @@ const resources = {
       email: "Email",
       password: "Password",
       wrongEmailFormat: "Invalid email format",
+      invalidPassword:
+        "Password must be at least 6 characters, contain an uppercase letter and a number.",
       dontHaveAccount: "Don't have an account? ",
       alreadyHaveAccount: "Already have an account? ",
       settings: {
@@ -55,6 +57,8 @@ const resources = {
       email: "Correo Electrónico",
       password: "Contraseña",
       wrongEmailFormat: "Formato de email inválido",
+      invalidPassword:
+        "La contraseña debe tener al menos 6 caracteres, una mayúscula y un número.",
       dontHaveAccount: "¿No tienes cuenta? ",
       alreadyHaveAccount: "¿Ya tienes cuenta? ",
       settings: {
@@ -97,6 +101,8 @@ const resources = {
       email: "E-mail",
       password: "Mot de passe",
       wrongEmailFormat: "Format d'e-mail invalide",
+      invalidPassword:
+        "Le mot de passe doit contenir au moins 6 caractères, une majuscule et un chiffre.",
       dontHaveAccount: "Vous n'avez pas de compte ? ",
       alreadyHaveAccount: "Vous avez déjà un compte ? ",
       settings: {
@@ -139,6 +145,8 @@ const resources = {
       email: "E-mail",
       password: "Senha",
       wrongEmailFormat: "Formato de e-mail inválido",
+      invalidPassword:
+        "A senha deve ter pelo menos 6 caracteres, uma letra maiúscula e um número.",
       dontHaveAccount: "Não tem uma conta? ",
       alreadyHaveAccount: "Já tem uma conta? ",
       settings: {
@@ -181,6 +189,8 @@ const resources = {
       email: "E-Mail",
       password: "Passwort",
       wrongEmailFormat: "Ungültiges E-Mail-Format",
+      invalidPassword:
+        "Das Passwort muss mindestens 6 Zeichen, einen Großbuchstaben und eine Zahl enthalten.",
       dontHaveAccount: "Kein Konto? ",
       alreadyHaveAccount: "Bereits ein Konto? ",
       settings: {
@@ -223,6 +233,8 @@ const resources = {
       email: "E-mail",
       password: "Password",
       wrongEmailFormat: "Formato e-mail non valido",
+      invalidPassword:
+        "La password deve contenere almeno 6 caratteri, una lettera maiuscola e un numero.",
       dontHaveAccount: "Non hai un account? ",
       alreadyHaveAccount: "Hai già un account? ",
       settings: {

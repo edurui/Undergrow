@@ -1,3 +1,3 @@
 {
-  "conventionalCommits.scopes": ["scripts", "general"]
+  "conventionalCommits.scopes": ["scripts", "general", "auth"]
 }

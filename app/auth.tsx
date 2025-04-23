@@ -28,6 +28,11 @@ const validateEmail = (text: string): boolean => {
   return emailRegex.test(text);
 };
 
+const validatePassword = (text: string): boolean => {
+  const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
+  return passwordRegex.test(text);
+};
+
 const AuthScreen: React.FC = () => {
   const { t } = useTranslation();
 
@@ -37,6 +42,8 @@ const AuthScreen: React.FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
   const [emailError, setEmailError] = useState<string | null>(null);
+  const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Hooks y contexto
@@ -56,6 +63,19 @@ const AuthScreen: React.FC = () => {
       const isValid = validateEmail(text);
       setIsEmailValid(isValid);
       setEmailError(isValid ? null : t("wrongEmailFormat"));
+    }
+  };
+
+  const handlePasswordChange = (text: string) => {
+    setPassword(text);
+
+    if (text.length === 0) {
+      setIsPasswordValid(false);
+      setPasswordError(null);
+    } else {
+      const isValid = validatePassword(text);
+      setIsPasswordValid(isValid);
+      setPasswordError(isValid ? null : t("invalidPassword"));
     }
   };
 
@@ -193,7 +213,12 @@ const AuthScreen: React.FC = () => {
   };
 
   // Cálculo para deshabilitar botón (sin cambios, sigue usando isLoading)
-  const isButtonDisabled = !email || !password || !isEmailValid || isLoading;
+  const isButtonDisabled =
+    !email ||
+    !password ||
+    !isEmailValid ||
+    isLoading ||
+    (!isLogin && !isPasswordValid);
 
   const styles = StyleSheet.create({
     container: {
@@ -297,10 +322,13 @@ const AuthScreen: React.FC = () => {
             placeholder={t("password")}
             placeholderTextColor={currentColors.placeholder}
             value={password}
-            onChangeText={setPassword}
+            onChangeText={handlePasswordChange}
             secureTextEntry
             editable={!isLoading}
           />
+          {passwordError && (
+            <Text style={styles.errorText}>{passwordError}</Text>
+          )}
 
           <TouchableOpacity
             style={[styles.button, isButtonDisabled && styles.buttonDisabled]}
